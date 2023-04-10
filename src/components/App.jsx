@@ -8,7 +8,7 @@ import css from './App.module.css';
 
 export default function App() {
   const [contacts, setContacts] = useState(() => {
-    return JSON.parse(window.localStorage.getItem('contacts')) ?? '';
+    return JSON.parse(window.localStorage.getItem('contacts')) ?? [];
   });
   const [filter, setFilter] = useState('');
 
@@ -30,12 +30,11 @@ export default function App() {
     setFilter(evt.currentTarget.value);
   };
 
-  const getVisibleContact = () => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
+  const normalizedFilter = filter.toLowerCase();
+
+  const getVisibleContact = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(normalizedFilter)
+  );
 
   const deleteContact = contactId => {
     setContacts(contacts.filter(contact => contact.id !== contactId));
@@ -53,7 +52,7 @@ export default function App() {
       <h2>Contacts</h2>
       <Filter value={filter} onChange={changeFilter} />
       <ContactList
-        contacts={getVisibleContact()}
+        contacts={getVisibleContact}
         onDeleteContact={deleteContact}
       />
     </div>
